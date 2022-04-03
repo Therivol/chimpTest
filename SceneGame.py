@@ -5,31 +5,12 @@ import random
 from SceneEnd import SceneEnd
 
 
-class GameTile:
-    def __init__(self, number, loc, game):
-        self.number = number
-        self.loc = loc
-        self.game = game
-        self.text = game.font.render(str(self.number + 1), True, (0, 0, 0))
-
-    def draw(self, canvas, rect):
-        if self.number in self.game.clicked_tiles:
-            return
-        if self.game.grid.get_tile_from_pos(self.game.window.get_mouse_pos()).loc == self.loc:
-            p.draw.rect(canvas, (230, 230, 230), rect)
-        else:
-            p.draw.rect(canvas, (180, 180, 180), rect)
-        p.draw.rect(canvas, (0, 0, 0), rect, 2)
-        if not self.game.started:
-            canvas.blit(self.text, rect.topleft)
-
-
 class SceneGame(Scene):
 
-    def __init__(self, game, grid_size):
+    def __init__(self, game):
         super().__init__("Game", game)
 
-        self.grid_size = grid_size
+        self.grid_size = (12, 7)
         self.tile_size = self.window.RES[0] / self.grid_size[0]
 
         self.grid = Grid(self.grid_size, self.tile_size)
@@ -41,11 +22,9 @@ class SceneGame(Scene):
         self.started = False
 
         self.game_tiles = {}
-        self.clicked_tiles = []
         self.generate_tile_locations(self.round)
 
     def generate_tile_locations(self, level):
-        self.clicked_tiles.clear()
         self.game_tiles.clear()
         self.started = False
         self.sequence_number = 0
@@ -82,9 +61,11 @@ class SceneGame(Scene):
 
     def click_game_tile(self, tile):
         self.started = True
+        if self.game_tiles[tile].hidden:
+            return
         if self.game_tiles[tile].number == self.sequence_number:
             self.sequence_number += 1
-            self.clicked_tiles.append(self.game_tiles[tile].number)
+            self.game_tiles[tile].hidden = True
             if self.sequence_number == self.round:
                 self.round += 1
                 self.generate_tile_locations(self.round)
@@ -102,3 +83,25 @@ class SceneGame(Scene):
         # self.grid.draw(self.window.canvas)
         for tile in self.game_tiles.keys():
             self.game_tiles[tile].draw(self.window.canvas, tile.rect)
+
+
+class GameTile:
+    def __init__(self, number, loc, game):
+        self.number = number
+        self.loc = loc
+        self.game = game
+        self.hidden = False
+        self.text = game.font.render(str(self.number + 1), True, (0, 0, 0))
+
+    def draw(self, canvas, rect):
+        if self.hidden:
+            return
+        tile = self.game.grid.get_tile_from_pos(self.game.window.get_mouse_pos())
+        if tile:
+            if tile.loc == self.loc:
+                p.draw.rect(canvas, (230, 230, 230), rect)
+            else:
+                p.draw.rect(canvas, (180, 180, 180), rect)
+        p.draw.rect(canvas, (0, 0, 0), rect, 2)
+        if not self.game.started:
+            canvas.blit(self.text, rect.topleft)

@@ -18,7 +18,7 @@ class SceneMenu(Scene):
         if self.play_button.collidepoint(self.window.get_mouse_pos()):
             self.highlighted = True
             if self.controller.get_button_down("1"):
-                self.scene_manager.add(SceneGame(self.game, (12, 7)))
+                self.scene_manager.add(SceneGame(self.game))
         else:
             self.highlighted = False
 

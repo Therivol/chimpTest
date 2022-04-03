@@ -20,7 +20,7 @@ class SceneEnd(Scene):
             self.highlighted = True
             if self.controller.get_button_down("1"):
                 self.scene_manager.remove_all()
-                self.scene_manager.add(SceneGame.SceneGame(self.game, (12, 7)))
+                self.scene_manager.add(SceneGame.SceneGame(self.game))
         else:
             self.highlighted = False
 
