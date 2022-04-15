@@ -18,8 +18,9 @@ class SceneGame(Scene):
         self.font = p.font.SysFont("Segoe UI", 48)
 
         self.sequence_number = 0
-        self.round = 1
+        self.round = 4
         self.started = False
+        self.hidden = True
 
         self.game_tiles = {}
         self.generate_tile_locations(self.round)
@@ -27,10 +28,11 @@ class SceneGame(Scene):
     def generate_tile_locations(self, level):
         self.game_tiles.clear()
         self.started = False
+        self.hidden = True
         self.sequence_number = 0
 
-        if level == 0:
-            pass
+        if level == 4:
+            self.hidden = False
 
         new_tile_loc = []
 
@@ -103,5 +105,5 @@ class GameTile:
             else:
                 p.draw.rect(canvas, (180, 180, 180), rect)
         p.draw.rect(canvas, (0, 0, 0), rect, 2)
-        if not self.game.started:
+        if not self.game.started or not self.game.hidden:
             canvas.blit(self.text, rect.topleft)

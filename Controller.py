@@ -19,7 +19,6 @@ class Controller:
 
     def set_key(self, key):
         key_name = p.key.name(key)
-        # Debug.log(key_name)
         self.raw_keys[key_name] = True
         if key_name in self.key_binds.keys():
             self.actions[self.key_binds[key_name]] = True
