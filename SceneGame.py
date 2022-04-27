@@ -46,15 +46,6 @@ class SceneGame(Scene):
 
             self.game_tiles[self.grid.grid[y][x]] = GameTile(i, (x, y), self)
 
-    def on_destroy(self):
-        pass
-
-    def on_activate(self):
-        pass
-
-    def early_update(self, delta_time):
-        pass
-
     def update(self, delta_time):
         if self.controller.get_button_down("1"):
             tile = self.grid.get_tile_from_pos(self.window.get_mouse_pos())
@@ -77,12 +68,8 @@ class SceneGame(Scene):
     def end(self):
         self.scene_manager.add(SceneEnd(self.game, self.round))
 
-    def late_update(self, delta_time):
-        pass
-
     def draw(self, canvas):
 
-        # self.grid.draw(self.window.canvas)
         for tile in self.game_tiles.keys():
             self.game_tiles[tile].draw(self.window.canvas, tile.rect)
 

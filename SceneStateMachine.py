@@ -6,14 +6,8 @@ class SceneStateMachine:
         self.last_scene = None
         self.cur_scene = None
 
-    def early_update(self, delta_time):
-        self.cur_scene.early_update(delta_time)
-
     def update(self, delta_time):
         self.cur_scene.update(delta_time)
-
-    def late_update(self, delta_time):
-        self.cur_scene.late_update(delta_time)
 
     def draw(self, canvas):
         self.cur_scene.draw(canvas)
@@ -23,7 +17,6 @@ class SceneStateMachine:
         self.cur_scene = scene
 
     def remove(self):
-        self.cur_scene.on_destroy()
         self.stack.pop()
         self.cur_scene = self.stack[-1]
 
